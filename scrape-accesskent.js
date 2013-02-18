@@ -64,10 +64,10 @@ var last = 0;
 function printPercentage(){
   var per = Math.round(100.0*(output.totalFinished / output.totalChecked));
   
-  //if(per % 5 == 0 && per != last){
+  if(per % 1 == 0 && per != last){
    console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
- //  last = per;
- // }
+   last = per;
+  }
 }
 
 
