@@ -1,7 +1,7 @@
+//require('nodetime').profile()
 var util = require('util')
   , request = require('request')
   , async = require('async')
-  , jsdom = require('jsdom').jsdom
   , S = require('string')
   , fs = require('fs');
 
@@ -64,10 +64,10 @@ var last = 0;
 function printPercentage(){
   var per = Math.round(100.0*(output.totalFinished / output.totalChecked));
   
- // if(per % 1 == 0 && per != last){
+  if(per % 5 == 0 && per != last){
    console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
    last = per;
- // }
+  }
 }
 
 
@@ -139,6 +139,8 @@ stream.once('open', function(fd) {
 });
 
 function checkProp(parcel,callback){
+
+
   var ret = {
     parcel : parcel,
     foundInSearch : false,
@@ -161,7 +163,6 @@ function checkProp(parcel,callback){
           if(e) return callback(e);
 
           ret.info = getParcelInformation(body) || {};
-
 
           if(config.cityFilter.length > 0){
             var found = false;
@@ -205,17 +206,41 @@ function checkProp(parcel,callback){
 }
 
 function getParcelInformation(body){
-  var window = jsdom(body).createWindow()
-    , $ = require('jquery').create(window);
-    var ret = {};
-    var find = [
-      {id : 4,name : "area"},
-      {id : 6,name : "status"},
-      {id : 7,name : "addressSteet"},
-    ];
-    var form = $("form");
-    find.forEach(function(f){
-      ret[f.name] = S($('.avtable-inner tr:nth-child('+f.id+') td:nth-child(2)',form).text()).trim().s;
-    });
-    return ret;
+  var key = "<td >Government Unit:</td>";
+  var k = body.search(key);
+  var match = body.substr(k+key.length,100);
+  var s = match.search("<td >");
+  var e = match.search("</td>");
+  var area = S(match.substr(s+5,e-s-5)).trim().s;
+
+  var key = '<td  valign="Top"  colspan=1 height="15">Property Address:</td>';
+  var k = body.search(key);
+  var match = body.substr(k+key.length,200);
+  var s = match.search("<td>");
+  var e = match.search("</td>");
+  var addr = S(match.substr(s+4,e-s-4)).trim().s;
+
+  var key = '<td  valign="Top"  colspan=1 height="15">Property Classification:</td>';
+  var k = body.search(key);
+  var match = body.substr(k+key.length,200);
+  var s = match.search("<td>");
+  var e = match.search("</td>");
+  var type = S(match.substr(s+4,e-s-4)).trim().s;
+
+  var key = '<td  valign="Top" colspan=1 height="19">Acreage & Lot Dimensions:</td>';
+  var k = body.search(key);
+  var match = body.substr(k+key.length,200);
+  var subkey = '<td  valign="Top"  colspan=1 height="19">';
+  var s = match.search(subkey);
+  var e = match.search("</td>");
+  var size = S(match.substr(s+subkey.length,e-s-subkey.length)).trim().s;
+
+  return {
+    area : area,
+    addressSteet : addr,
+    type : type,
+    size : size
+  };
 }
+
+console.log(process.pid)
