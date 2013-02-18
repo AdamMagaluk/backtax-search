@@ -9,5 +9,6 @@
     "chunk" : [181,181],
     "id" : [0,100]
   },
+  "cityFilter" : ["51 - CITY OF GRAND RAPIDS", "44 - CITY OF EAST GRAND RAPIDS"],
   "outFile" : "testrun.csv"
 }

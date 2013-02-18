@@ -161,6 +161,19 @@ function checkProp(parcel,callback){
 
           ret.info = getParcelInformation(body) || {};
 
+
+          if(config.cityFilter.length > 0){
+            var found = false;
+            config.cityFilter.forEach(function(x){
+              if(ret.info.area == x){
+                found = true;
+              }
+            })
+
+            if(!found) return callback(null,ret);
+          }
+          //if(ret.info.area)
+
           request.get(config.baseUrl+'/delqSearch.do',{jar : jar},function(e,res,body){
             if(e) return callback(e);
               if(body){
