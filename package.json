@@ -1,0 +1,15 @@
+{
+  "name": "backtax-search",
+  "version": "0.0.0",
+  "description": "Scrape Accesskent.com for houses with back taxes.",
+  "main": "scrape-accesskent.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "depancies" : {
+    "request" : "~2.0.0"
+  },
+  "repository": "https://github.com/AdamMagaluk/backtax-search",
+  "author": "Adam Magaluk <AdamMagaluk@gmail.com>",
+  "license": "BSD"
+}
