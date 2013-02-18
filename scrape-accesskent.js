@@ -64,11 +64,14 @@ var last = 0;
 function printPercentage(){
   var per = Math.round(100.0*(output.totalFinished / output.totalChecked));
   
-  if(per % 1 == 0 && per != last){
+ // if(per % 1 == 0 && per != last){
    console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
    last = per;
-  }
+ // }
 }
+
+
+var stream = fs.createWriteStream(config.outFile);
 
 function consoleShow(){
   var time =  endTime-startTime;
@@ -91,7 +94,9 @@ var q = async.queue(function (task, callback) {
       }
       if(ret.years.length == config.yearsToCheck.length){
         output.matched.push(ret);
+        stream.write(ret.parcel.toString()+","+ret.info.addressSteet+" "+ret.info.area+"\n");
       }
+
       output.totalFinished++;
       printPercentage();
       callback();
@@ -100,13 +105,6 @@ var q = async.queue(function (task, callback) {
 
 
 function writeToFile(){
-  var stream = fs.createWriteStream(config.outFile);
-  stream.once('open', function(fd) {
-      output.matched.forEach(function(item){
-        stream.write(item.parcel.toString()+","+item.info.addressSteet+" "+item.info.area+"\n");
-      })
-  });
-
   fs.writeFile(config.outFile+".json",JSON.stringify(output), function(err) {
       if(err) {
           console.log(err);
@@ -114,8 +112,8 @@ function writeToFile(){
           console.log("The file was saved!");
       }
   }); 
-
 }
+
 
 q.drain = function() {
   endTime = new Date().getTime();
@@ -124,18 +122,21 @@ q.drain = function() {
   writeToFile();
 };
 
-for(var iCounty=config.range.county[0];iCounty<=config.range.county[1];iCounty++){
-  for(var iTownship=config.range.township[0];iTownship<=config.range.township[1];iTownship++){
-    for(var iSection=config.range.section[0];iSection<=config.range.section[1];iSection++){
-      for(var iChunk=config.range.chunk[0];iChunk<=config.range.chunk[1];iChunk++){
-        for(var iId=config.range.id[0];iId<=config.range.id[1];iId++){
-          output.totalChecked++;
-          q.push({parcel: new ParcelPin([iCounty,iTownship,iSection,iChunk,iId])});
+
+stream.once('open', function(fd) {
+  for(var iCounty=config.range.county[0];iCounty<=config.range.county[1];iCounty++){
+    for(var iTownship=config.range.township[0];iTownship<=config.range.township[1];iTownship++){
+      for(var iSection=config.range.section[0];iSection<=config.range.section[1];iSection++){
+        for(var iChunk=config.range.chunk[0];iChunk<=config.range.chunk[1];iChunk++){
+          for(var iId=config.range.id[0];iId<=config.range.id[1];iId++){
+            output.totalChecked++;
+            q.push({parcel: new ParcelPin([iCounty,iTownship,iSection,iChunk,iId])});
+          }
         }
       }
     }
   }
-}
+});
 
 function checkProp(parcel,callback){
   var ret = {

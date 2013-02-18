@@ -1,6 +1,6 @@
 {
   "baseUrl": "https://www.accesskent.com/Property",
-  "workers": 50,
+  "workers": 150,
   "yearsToCheck" : [2010,2011],
   "range" : {
     "county" : [41,41],
@@ -10,5 +10,5 @@
     "id" : [0,100]
   },
   "cityFilter" : ["51 - CITY OF GRAND RAPIDS", "44 - CITY OF EAST GRAND RAPIDS"],
-  "outFile" : "testrun.csv"
+  "outFile" : "run_29,29_0,250_0,100.csv"
 }
