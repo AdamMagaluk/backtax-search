@@ -6,10 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "depancies" : {
-    "request" : "~2.0.0"
+  "dependencies" : {
+    "request" :  "2.x.x",
+    "async"   :  "0.2.x"
   },
-  "repository": "https://github.com/AdamMagaluk/backtax-search",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AdamMagaluk/backtax-search"
+  },
   "author": "Adam Magaluk <AdamMagaluk@gmail.com>",
   "license": "BSD"
 }
