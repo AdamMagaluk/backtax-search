@@ -3,9 +3,24 @@ var util = require('util')
   , request = require('request')
   , async = require('async')
   , S = require('string')
-  , fs = require('fs');
+  , fs = require('fs')
+  , nodemailer = require("nodemailer");
 
 var config = require('./config/config.json');
+var aws = require('./config/aws.json');
+
+var mailOptions = {
+    from: "Adam Magaluk <AdamMagaluk@gmail.com>", // sender address
+    to: "AdamMagaluk@gmail.com", // list of receivers
+    subject: "Scrape Report : " + process.pid, // Subject line
+    html: "" // html body
+}
+
+var transport = nodemailer.createTransport("SES", {
+    AWSAccessKeyID: aws.key,
+    AWSSecretKey: aws.secret
+});
+
 
 function paddy(n, p, c) {
     var pad_char = typeof c !== 'undefined' ? c : '0';
@@ -64,9 +79,20 @@ var last = 0;
 function printPercentage(){
   var per = Math.round(100.0*(output.totalFinished / output.totalChecked));
   
-  if(per % 1 == 0 && per != last){
+  if(per % 5 == 0 && per != last){
    console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
+   mailOptions.html = per + "% complete " + output.totalFinished + "/"+output.totalChecked;
+   mailOptions.html += "<br>"+"Found:"+output.matched.length;
+   transport.sendMail(mailOptions, function(error, response){
+    if(error){
+        console.log(error);
+    }
+   });
+
    last = per;
+  }else if(per % 1 == 0 && per != last){
+    console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
+    last = per;
   }
 }
 
