@@ -9,7 +9,8 @@
   "dependencies" : {
     "request" :  "2.x.x",
     "async"   :  "0.2.x",
-    "string"  :  "~1.2.1"
+    "string"  :  "~1.2.1",
+    "nodemailer" : "~0.3.42"
   },
   "repository": {
     "type": "git",

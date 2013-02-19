@@ -84,7 +84,9 @@ function printPercentage(){
     lastTime = new Date().getTime();
    console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
    mailOptions.html = per + "% complete " + output.totalFinished + "/"+output.totalChecked;
-   mailOptions.html += "<br>"+"Found:"+output.matched.length;
+   mailOptions.html += "<br>"+"Found:"+output.matched.length+"<br><br>";
+   mailOptions.html += JSON.stringify(process.memoryUsage());
+
    transport.sendMail(mailOptions, function(error, response){
     if(error){
         console.log(error);
