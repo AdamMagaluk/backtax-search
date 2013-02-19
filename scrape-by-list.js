@@ -84,18 +84,18 @@ function printPercentage(){
   
   if(per % 5 == 0 && per != last || new Date().getTime()-lastTime > 108000000){
    lastTime = new Date().getTime();
-   //console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
+   console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
    mailOptions.html = per + "% complete " + output.totalFinished + "/"+output.totalChecked;
    mailOptions.html += "<br>"+"Found:"+output.matched.length+"<br><br>";
    mailOptions.html += JSON.stringify(process.memoryUsage());
 
-/*
+
    transport.sendMail(mailOptions, function(error, response){
     if(error){
         console.log(error);
     }
    });
-*/
+
    last = per;
   }else if(per % 1 == 0 && per != last){
     console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
@@ -156,6 +156,7 @@ q.drain = function() {
 };
 
 parcelsToScrape.forEach(function(pString){
+  output.totalChecked++;
   q.push({parcel: new ParcelPin(pString)});
 });
 
