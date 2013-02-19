@@ -41,15 +41,16 @@ var run = [ [1,2500],[2500,5000],[5000,7500],[7500,10000],[10000,12500]];
 
 cvts.forEach(function(cvt){
 	alphabet.forEach(function(letter){
-		run.forEach(function(a){
+
+		for(var i=1;i<=11000;i+=config.blockSize){
 			q.push({
 				street : letter,
-				start : a[0],
-				end : a[1],
+				start : i,
+				end : Number(i+config.blockSize),
 				cvt : cvt
 			});
 			totalRequests++;
-		});
+		}
 	});
 });
 console.log(totalRequests);
