@@ -80,7 +80,7 @@ var last = 0;
 function printPercentage(){
   var per = Math.round(100.0*(output.totalFinished / output.totalChecked));
   
-  if(per % 5 == 0 && per != last || new Date().getTime()-lastTime > 180000){
+  if(per % 5 == 0 && per != last || new Date().getTime()-lastTime > 108000000){
     lastTime = new Date().getTime();
    console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
    mailOptions.html = per + "% complete " + output.totalFinished + "/"+output.totalChecked;
