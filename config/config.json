@@ -10,5 +10,6 @@
     "id" : [0,100]
   },
   "cityFilter" : ["51 - CITY OF GRAND RAPIDS", "44 - CITY OF EAST GRAND RAPIDS"],
-  "outFile" : "run_29,29_0,250_0,100.csv"
+  "outFile" : "run_29,29_0,250_0,100.csv",
+  "parcelFile" : "./out.json"
 }

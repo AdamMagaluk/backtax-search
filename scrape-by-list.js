@@ -8,6 +8,8 @@ var util = require('util')
 
 var config = require('./config/config.json');
 var aws = require('./config/aws.json');
+var parcelsToScrape = require(config.parcelFile).parcels;
+
 
 var mailOptions = {
     from: "Adam Magaluk <AdamMagaluk@gmail.com>", // sender address
@@ -81,18 +83,19 @@ function printPercentage(){
   var per = Math.round(100.0*(output.totalFinished / output.totalChecked));
   
   if(per % 5 == 0 && per != last || new Date().getTime()-lastTime > 108000000){
-    lastTime = new Date().getTime();
-   console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
+   lastTime = new Date().getTime();
+   //console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
    mailOptions.html = per + "% complete " + output.totalFinished + "/"+output.totalChecked;
    mailOptions.html += "<br>"+"Found:"+output.matched.length+"<br><br>";
    mailOptions.html += JSON.stringify(process.memoryUsage());
 
+/*
    transport.sendMail(mailOptions, function(error, response){
     if(error){
         console.log(error);
     }
    });
-
+*/
    last = per;
   }else if(per % 1 == 0 && per != last){
     console.log(per + "% complete " + output.totalFinished + "/"+output.totalChecked);
@@ -152,21 +155,10 @@ q.drain = function() {
   writeToFile();
 };
 
-
-stream.once('open', function(fd) {
-  for(var iCounty=config.range.county[0];iCounty<=config.range.county[1];iCounty++){
-    for(var iTownship=config.range.township[0];iTownship<=config.range.township[1];iTownship++){
-      for(var iSection=config.range.section[0];iSection<=config.range.section[1];iSection++){
-        for(var iChunk=config.range.chunk[0];iChunk<=config.range.chunk[1];iChunk++){
-          for(var iId=config.range.id[0];iId<=config.range.id[1];iId++){
-            output.totalChecked++;
-            q.push({parcel: new ParcelPin([iCounty,iTownship,iSection,iChunk,iId])});
-          }
-        }
-      }
-    }
-  }
+parcelsToScrape.forEach(function(pString){
+  q.push({parcel: new ParcelPin(pString)});
 });
+
 
 function checkProp(parcel,callback){
 
