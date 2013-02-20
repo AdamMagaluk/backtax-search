@@ -52,14 +52,14 @@ data.matched.forEach(function(d){
 	var id =  new ParcelPin();
 	id.id = d.parcel.id;
 	var out = [];
-//	out.push(id.toString())
+	out.push(id.toString())
 	out.push(d.info.addressSteet + " " + d.info.area.substr(5,d.info.area.length) + " MI" )
-//	out.push(d.info.type)
-//	out.push(d.info.size)
-//	out.push(d.years[0].taxValue)
-//	out.push(d.years[0].taxMissing)
-//	out.push(d.years[1].taxValue)
-//	out.push(d.years[1].taxMissing)
+	out.push(d.info.type)
+	out.push(d.info.size)
+	out.push(d.years[0].taxValue)
+	out.push(d.years[0].taxMissing)
+	out.push(d.years[1].taxValue)
+	out.push(d.years[1].taxMissing)
 	out.forEach(function(x){
 		stream.write(x.replace(",",""));
 	});
